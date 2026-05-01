@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["ExpoMlkitOcrModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.mlkitocr.ExpoMlkitOcrModule"]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-mlkit-ocr": ["../src/index"],
+      "expo-mlkit-ocr/*": ["../src/*"]
+    }
+  }
+}
