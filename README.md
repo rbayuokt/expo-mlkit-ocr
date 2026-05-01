@@ -24,14 +24,16 @@ Production-ready Expo Module for on-device text recognition (OCR) using **Google
 ## Installation
 
 ```bash
-npx expo install expo-mlkit-ocr expo-image-picker
+npx expo install expo-mlkit-ocr expo-image-picker expo-build-properties
 ```
+
+> ⚠️ **`expo-build-properties` is REQUIRED** to set the iOS deployment target to `16.0` (needed by Google ML Kit on iOS).
 
 ## Setup
 
-### With EAS Build
+### 1. Configure `app.json` / `app.config.js`
 
-Add the plugin to your `app.json`:
+Add **both plugins** to your config:
 
 ```json
 {
@@ -42,22 +44,35 @@ Add the plugin to your `app.json`:
         {
           "iosEngine": "auto"
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "16.0"
+          }
+        }
       ]
     ]
   }
 }
 ```
 
-Then run:
+> ⚠️ **Important:** Without `deploymentTarget: "16.0"` and `useFrameworks: "static"`, you will get:
+> ```
+> ERROR [runtime not ready]: Error: Cannot find native module 'ExpoMlkitOcr'
+> ```
+
+### 2. Build Your App
+
+**With EAS Build:**
 
 ```bash
 eas build --platform ios
 eas build --platform android
 ```
 
-### Development (Local Prebuild)
-
-To test locally with a development client:
+**Or with local prebuild:**
 
 ```bash
 npx expo prebuild --clean
@@ -65,6 +80,18 @@ npx expo run:ios
 # or
 npx expo run:android
 ```
+
+> ❌ **Will NOT work in Expo Go** — this is a custom native module. You need a development client or EAS Build.
+
+### Troubleshooting
+
+**`Cannot find native module 'ExpoMlkitOcr'`**
+- Did you add `expo-build-properties` plugin with `deploymentTarget: "16.0"`? ⚠️ Most common cause
+- Did you run `npx expo prebuild --clean` after installing?
+- Are you running on a development client (not Expo Go)?
+
+**Build fails on iOS Simulator (arm64)**
+- Use `iosEngine: "auto"` or `"vision"` in plugin config (uses Apple Vision instead of ML Kit)
 
 ## Usage
 
