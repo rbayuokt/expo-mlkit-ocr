@@ -1,10 +1,5 @@
 example/
-ios/
-android/
 src/
-*.podspec
-Podfile
-build.gradle
 scripts/
 .expo/
 .expo-shared/
@@ -14,7 +9,6 @@ docs/
 .gitignore
 tsconfig.json
 expo-module.config.json
-app.plugin.js
 plugins/
 README_DEV.md
 *.map
