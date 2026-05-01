@@ -9,7 +9,6 @@ docs/
 .gitignore
 tsconfig.json
 expo-module.config.json
-plugins/
 README_DEV.md
 *.map
 node_modules/
