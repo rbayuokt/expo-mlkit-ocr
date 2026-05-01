@@ -10,6 +10,7 @@ Production-ready Expo Module for on-device text recognition (OCR) using **Google
 - ✅ **iOS & Android** — native implementations using Expo Modules API
 - ✅ **TypeScript support** — fully typed API
 - ✅ **Expo Config Plugin** — automatic native setup
+- ✅ **Interactive overlay** — `<OCRTextOverlay>` component for visualizing & selecting recognized text
 
 ## Installation
 
@@ -170,6 +171,109 @@ Recognizes text from an image at the provided URI.
 - `IMAGE_LOAD_FAILED` — image could not be loaded from the URI
 - `RECOGNITION_FAILED` — text recognition failed (rare)
 
+### `<OCRTextOverlay />` — Interactive Bounding Box Overlay
+
+Renders interactive bounding boxes over an image to visualize OCR results. Tap boxes to select text and trigger a callback (e.g., copy to clipboard).
+
+**Usage:**
+
+```typescript
+import { recognizeText, OCRTextOverlay } from 'expo-mlkit-ocr';
+import { Image, Clipboard } from 'react-native';
+import { useState } from 'react';
+
+export default function App() {
+  const [result, setResult] = useState(null);
+
+  async function pickAndRecognize() {
+    const picked = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'] });
+    if (!picked.assets[0]) return;
+
+    const asset = picked.assets[0];
+    const ocrResult = await recognizeText(asset.uri);
+    setResult(ocrResult);
+  }
+
+  return (
+    <>
+      <Button title="Pick & Recognize" onPress={pickAndRecognize} />
+
+      {result && (
+        <OCRTextOverlay
+          result={result}
+          imageWidth={picked.assets[0].width}
+          imageHeight={picked.assets[0].height}
+          highlightLevel="line"
+          onSelect={(item) => Clipboard.setString(item.text)}
+        >
+          <Image source={{ uri: picked.assets[0].uri }} style={{ width: 300, height: 400 }} />
+        </OCRTextOverlay>
+      )}
+    </>
+  );
+}
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `result` | `RecognitionResult` | — | OCR result from `recognizeText()` |
+| `imageWidth` | `number` | — | Native image width (pixels) |
+| `imageHeight` | `number` | — | Native image height (pixels) |
+| `children` | `ReactNode` | — | Image component to wrap |
+| `highlightLevel` | `'block' \| 'line' \| 'element'` | `'line'` | Which level to highlight |
+| `resizeMode` | `'contain' \| 'cover'` | `'contain'` | Image resize behavior |
+| `boxColor` | `string` | `'#00BFFF'` | Box border & fill color (hex) |
+| `selectedBoxColor` | `string` | `'#FF6347'` | Color when a box is selected |
+| `boxOpacity` | `number` | `0.25` | Fill opacity (0–1) |
+| `strokeWidth` | `number` | `2` | Border width (pixels) |
+| `cornerRadius` | `number` | `4` | Rounded corner radius (pixels) |
+| `multiSelect` | `boolean` | `true` | Allow selecting multiple boxes |
+| `onSelect` | `(item) => void` | — | Callback when box(es) are tapped (single item or array) |
+| `style` | `ViewStyle` | — | Optional wrapper style |
+
+**Multi-Select Example:**
+
+```typescript
+// Single selection (one box at a time)
+<OCRTextOverlay
+  result={result}
+  imageWidth={1920}
+  imageHeight={1080}
+  multiSelect={false}  // Only one selection
+  onSelect={(item) => console.log('Selected:', item.text)}
+>
+  <Image source={{ uri }} />
+</OCRTextOverlay>
+
+// Multiple selection (tap multiple boxes)
+<OCRTextOverlay
+  result={result}
+  imageWidth={1920}
+  imageHeight={1080}
+  multiSelect={true}  // Default - allow multiple selections
+  onSelect={(items) => {
+    if (Array.isArray(items)) {
+      console.log('Selected items:', items.map(i => i.text).join(', '));
+    } else {
+      console.log('Single item:', items.text);
+    }
+  }}
+>
+  <Image source={{ uri }} />
+</OCRTextOverlay>
+```
+
+**Highlights:**
+- ✅ Pure React Native (no external canvas library)
+- ✅ Tap to toggle selection + visual highlight
+- ✅ Multi-select mode: tap multiple boxes, all stay highlighted
+- ✅ Single-select mode: only one box highlighted at a time
+- ✅ Works with any `<Image>` component (react-native, expo-image, etc.)
+- ✅ Automatic coordinate scaling for `contain` and `cover` resize modes
+- ✅ Full TypeScript support
+
 ## Common Errors
 
 ### `Error: expo-mlkit-ocr is not supported on web.`
@@ -227,7 +331,8 @@ expo-mlkit-ocr/
 │   ├── index.ts
 │   ├── ExpoMlkitOcr.types.ts
 │   ├── ExpoMlkitOcrModule.ts
-│   └── ExpoMlkitOcrModule.web.ts
+│   ├── ExpoMlkitOcrModule.web.ts
+│   └── OCRTextOverlay.tsx        # Interactive overlay component
 ├── ios/
 │   ├── ExpoMlkitOcrModule.swift   # ML Kit integration
 │   └── ExpoMlkitOcr.podspec
