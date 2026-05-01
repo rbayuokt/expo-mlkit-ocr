@@ -8,7 +8,6 @@ docs/
 .git/
 .gitignore
 tsconfig.json
-expo-module.config.json
 README_DEV.md
 *.map
 node_modules/
