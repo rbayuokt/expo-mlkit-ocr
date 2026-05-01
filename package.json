@@ -19,7 +19,11 @@
     "react-native",
     "expo",
     "expo-mlkit-ocr",
-    "ExpoMlkitOcr"
+    "ExpoMlkitOcr",
+    "ocr",
+    "skia",
+    "overlay",
+    "text-recognition"
   ],
   "repository": "https://github.com/rbayuokt/expo-mlkit-ocr",
   "bugs": {
@@ -28,11 +32,10 @@
   "author": "rbayuokt <rizkybayuoktavian@gmail.com> (https://github.com/rbayuokt)",
   "license": "MIT",
   "homepage": "https://github.com/rbayuokt/expo-mlkit-ocr#readme",
-  "dependencies": {},
   "devDependencies": {
     "@types/react": "~19.1.1",
-    "expo-module-scripts": "^55.0.2",
     "expo": "^55.0.18",
+    "expo-module-scripts": "^55.0.2",
     "react-native": "0.82.1"
   },
   "peerDependencies": {
