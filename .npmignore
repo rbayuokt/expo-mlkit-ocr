@@ -1,17 +1,40 @@
+# Source TypeScript (already compiled to build/)
+/src/
+
+# Native build artifacts (these get rebuilt in user's project)
+android/build/
+android/.gradle/
+android/.cxx/
+ios/build/
+ios/Pods/
+ios/*.xcworkspace
+ios/*.xcodeproj/xcuserdata/
+
+# Example app
 example/
-src/
-scripts/
-.expo/
-.expo-shared/
+
+# Documentation & meta
 docs/
+scripts/
 .github/
 .git/
 .gitignore
-tsconfig.json
 README_DEV.md
+
+# Configs only needed for development
+tsconfig.json
+
+# Source maps (optional - keep if you want debugging)
 *.map
+
+# OS / IDE files
 node_modules/
 .DS_Store
 *.log
 .env
 .env.local
+.expo/
+.expo-shared/
+.vscode/
+.idea/
+
