@@ -1,6 +1,15 @@
+![expo-mlkit-ocr](docs/expo-mlkit-ocr.png)
+
 # expo-mlkit-ocr
 
 Production-ready Expo Module for on-device text recognition (OCR) using **Google ML Kit Text Recognition v2** for both iOS and Android.
+
+## Preview
+
+<div align="center">
+  <img src="docs/android.png" height="500" alt="Android Preview" />
+  <img src="docs/ios.png" height="500" alt="iOS Preview" />
+</div>
 
 ## Features
 
@@ -28,7 +37,12 @@ Add the plugin to your `app.json`:
 {
   "expo": {
     "plugins": [
-      "expo-mlkit-ocr"
+      [
+        "expo-mlkit-ocr",
+        {
+          "iosEngine": "auto"
+        }
+      ]
     ]
   }
 }
