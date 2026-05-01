@@ -193,6 +193,30 @@ if (Platform.OS !== 'web') {
 - Use URIs from `expo-image-picker` or `expo-camera` which are guaranteed to work
 - On Android, both `file://` and `content://` URIs are supported
 
+### iOS Simulator (arm64) + iOS 26.x
+
+Google ML Kit CocoaPods binaries exclude the `ios-arm64-simulator` slice, so arm64-only simulator runtimes (for example iOS 26.x on Apple Silicon) can’t link ML Kit frameworks and will fail at build/link time.
+
+To keep development on simulator unblocked, `expo-mlkit-ocr` supports **Apple Vision** as a fallback OCR engine on iOS. The **JavaScript response shape stays the same** (`text`, `blocks`, `lines`, `elements`, `boundingBox`); only the underlying OCR engine changes.
+
+```json
+{
+  "expo": {
+    "plugins": [
+      ["expo-mlkit-ocr", { "iosEngine": "vision" }]
+    ]
+  }
+}
+```
+
+Supported `iosEngine` values:
+- `"auto"` (default): use Apple Vision (simulator-friendly default)
+- `"mlkit"`: use Google ML Kit (won’t build on arm64-only iOS Simulator runtimes)
+- `"vision"`: always use Apple Vision (disables ML Kit pods)
+
+Legacy option (equivalent to `iosEngine: "vision"`):
+- `disableMlkitOnSimulator: true`
+
 ## Development
 
 ### Project Structure
@@ -210,9 +234,9 @@ expo-mlkit-ocr/
 ├── android/
 │   ├── build.gradle
 │   └── src/main/java/.../ExpoMlkitOcrModule.kt
-├── plugin/
-│   ├── src/index.ts             # Config plugin
-│   └── tsconfig.json
+├── app.plugin.js                 # Expo config plugin entry
+├── plugins/
+│   └── withMlkitSimulatorArm64Fix.js
 ├── example/                      # Example app
 │   ├── App.tsx
 │   └── app.json

@@ -35,6 +35,20 @@
           "photosPermission": "The app needs access to your photos to extract text from images.",
           "cameraPermission": "The app needs access to your camera to capture images for text extraction."
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "16.0"
+          }
+        }
+      ],
+      [
+        "expo-mlkit-ocr",
+        {
+          "iosEngine": "auto"
+        }
       ]
     ]
   }

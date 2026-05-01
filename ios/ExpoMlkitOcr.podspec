@@ -10,17 +10,24 @@ Pod::Spec.new do |s|
   s.license        = package['license']
   s.author         = package['author']
   s.homepage       = package['homepage']
-  s.platforms      = {
-    :ios => '16.0'
-  }
+
+  s.platform       = :ios, '16.0'
   s.swift_version  = '5.9'
+
   s.source         = { git: 'https://github.com/rbayuokt/expo-mlkit-ocr' }
   s.static_framework = true
 
   s.dependency 'ExpoModulesCore'
-  s.dependency 'GoogleMLKit/TextRecognition', '~> 7.0'
+  # Google MLKit CocoaPods binaries currently exclude arm64 iOS Simulator slices
+  # (see `EXCLUDED_ARCHS[sdk=iphonesimulator*] = arm64` in their podspecs).
+  # This makes arm64-only simulator runtimes (e.g. iOS 26.x) fail to link.
+  #
+  # Set `EXPO_MLKIT_OCR_DISABLE_MLKIT=1` at `pod install` time (via a config plugin)
+  # to build the app on arm64 simulator without MLKit (module should handle this at runtime).
+  if ENV['EXPO_MLKIT_OCR_DISABLE_MLKIT'] != '1'
+    s.dependency 'GoogleMLKit/TextRecognition', '~> 7.0'
+  end
 
-  # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'GCC_WARN_INHIBIT_ALL_WARNINGS' => 'YES',
