@@ -1,6 +1,6 @@
 {
   "name": "expo-mlkit-ocr",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Production-ready Expo Module for on-device text recognition (OCR) using Google ML Kit Text Recognition v2",
   "main": "build/index.js",
   "types": "build/index.d.ts",
